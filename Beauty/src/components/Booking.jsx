@@ -106,7 +106,9 @@
 
 
 import { useState } from "react";
-import { Calendar, Clock, User, Mail, Phone, MessageSquare } from "lucide-react";
+import { Calendar, Clock, User, Mail, Phone } from "lucide-react";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Booking = () => {
   const [formData, setFormData] = useState({
@@ -119,7 +121,6 @@ const Booking = () => {
     message: "",
   });
 
-  const [focusedField, setFocusedField] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -132,7 +133,7 @@ const Booking = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/book", {
+      const response = await fetch(`${API_URL}/api/book`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -140,13 +141,13 @@ const Booking = () => {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!res.ok) {
+      if (!response.ok) {
         throw new Error(data.message || "Booking failed");
       }
 
-      alert("✅ Booking confirmed! We’ll contact you soon.");
+      alert("✅ Booking confirmed! We will contact you soon.");
 
       setFormData({
         name: "",
@@ -158,7 +159,7 @@ const Booking = () => {
         message: "",
       });
     } catch (error) {
-      console.error("❌ Booking error:", error.message);
+      console.error("Booking Error:", error);
       alert("❌ Booking failed. Please try again.");
     } finally {
       setLoading(false);
@@ -175,143 +176,103 @@ const Booking = () => {
   ];
 
   return (
-    <section id="contact" className="py-24 bg-white relative overflow-hidden">
-      <div className="absolute inset-0">
-        <div className="absolute top-20 right-10 w-96 h-96 bg-rose-200/30 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-pink-200/30 rounded-full blur-3xl animate-pulse" />
-      </div>
+    <section id="contact" className="py-24 bg-white">
+      <div className="max-w-3xl mx-auto px-4">
+        <h2 className="text-4xl font-bold text-center mb-10">
+          Book Your Appointment
+        </h2>
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold text-gray-900 mb-4">
-            Book Your Appointment
-          </h2>
-          <p className="text-xl text-gray-600">
-            Reserve your slot and experience luxury beauty treatments
-          </p>
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <Input
+              label="Full Name"
+              icon={<User size={16} />}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
 
-        <div className="max-w-3xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Name */}
-              <Input
-                label="Full Name"
-                icon={<User className="w-4 h-4" />}
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                onFocus={setFocusedField}
-                focused={focusedField}
-              />
+            <Input
+              label="Email Address"
+              icon={<Mail size={16} />}
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
 
-              {/* Email */}
-              <Input
-                label="Email Address"
-                icon={<Mail className="w-4 h-4" />}
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                onFocus={setFocusedField}
-                focused={focusedField}
-              />
+            <Input
+              label="Phone Number"
+              icon={<Phone size={16} />}
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+            />
 
-              {/* Phone */}
-              <Input
-                label="Phone Number"
-                icon={<Phone className="w-4 h-4" />}
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                onFocus={setFocusedField}
-                focused={focusedField}
-              />
-
-              {/* Service */}
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Select Service
-                </label>
-                <select
-                  name="service"
-                  value={formData.service}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-rose-400 outline-none"
-                >
-                  <option value="">Choose a service</option>
-                  {services.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Date */}
-              <Input
-                label="Preferred Date"
-                icon={<Calendar className="w-4 h-4" />}
-                name="date"
-                type="date"
-                value={formData.date}
-                onChange={handleChange}
-                onFocus={setFocusedField}
-                focused={focusedField}
-              />
-
-              {/* Time */}
-              <Input
-                label="Preferred Time"
-                icon={<Clock className="w-4 h-4" />}
-                name="time"
-                type="time"
-                value={formData.time}
-                onChange={handleChange}
-                onFocus={setFocusedField}
-                focused={focusedField}
-              />
-            </div>
-
-            {/* Message */}
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-2 block">
-                Additional Message
+              <label className="text-sm font-medium mb-2 block">
+                Select Service
               </label>
-              <textarea
-                name="message"
-                rows="4"
-                value={formData.message}
+              <select
+                name="service"
+                value={formData.service}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-rose-400 outline-none"
-              />
+                required
+                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200"
+              >
+                <option value="">Choose a service</option>
+                {services.map((service) => (
+                  <option key={service} value={service}>
+                    {service}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-rose-500 to-pink-600 text-white py-4 rounded-full font-semibold text-lg hover:scale-105 transition"
-            >
-              {loading ? "Booking..." : "Confirm Booking"}
-            </button>
-          </form>
-        </div>
+            <Input
+              label="Preferred Date"
+              icon={<Calendar size={16} />}
+              name="date"
+              type="date"
+              value={formData.date}
+              onChange={handleChange}
+            />
+
+            <Input
+              label="Preferred Time"
+              icon={<Clock size={16} />}
+              name="time"
+              type="time"
+              value={formData.time}
+              onChange={handleChange}
+            />
+          </div>
+
+          <textarea
+            name="message"
+            rows="4"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder="Additional message"
+            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-rose-500 to-pink-600 text-white py-4 rounded-full font-semibold text-lg hover:scale-105 transition"
+          >
+            {loading ? "Booking..." : "Confirm Booking"}
+          </button>
+        </form>
       </div>
     </section>
   );
 };
 
-const Input = ({
-  label,
-  icon,
-  name,
-  value,
-  onChange,
-  type = "text",
-}) => (
+const Input = ({ label, icon, name, value, onChange, type = "text" }) => (
   <div>
-    <label className="text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+    <label className="text-sm font-medium mb-2 flex items-center gap-2">
       {icon} {label}
     </label>
     <input
@@ -320,7 +281,7 @@ const Input = ({
       value={value}
       onChange={onChange}
       required
-      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-rose-400 outline-none"
+      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200"
     />
   </div>
 );
