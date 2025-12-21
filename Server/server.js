@@ -1,21 +1,52 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
 const bookingRoutes = require("./routes/bookingRoutes");
+const connectDB = require("./lib/db");
 
 const app = express();
-app.use(cors());
+
+/* ✅ CORS */
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://luxe-glow-five.vercel.app",
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
 app.use(express.json());
 
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch((err) => console.error("❌ Mongo Error:", err.message));
+/* ✅ Health check */
+app.get("/", (req, res) => {
+  res.json({ status: "API running" });
+});
 
+/* ✅ Ensure DB is connected */
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error("❌ DB connection failed:", err.message);
+    res.status(500).json({ error: "Database connection failed" });
+  }
+});
+
+/* ✅ Routes */
 app.use("/api/book", bookingRoutes);
 
-app.listen(5000, () =>
-  console.log("🚀 Server running on http://localhost:5000")
-);
+/* 🔥 LOCAL ONLY: start server */
+if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+  });
+}
+
+/* ✅ REQUIRED for Vercel */
+module.exports = app;

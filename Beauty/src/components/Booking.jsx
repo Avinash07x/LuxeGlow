@@ -147,8 +147,7 @@ const Booking = () => {
         throw new Error(data.message || "Booking failed");
       }
 
-      alert("✅ Booking confirmed! We will contact you soon.");
-
+      alert("✅ Booking confirmed!");
       setFormData({
         name: "",
         email: "",
@@ -184,35 +183,12 @@ const Booking = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
-            <Input
-              label="Full Name"
-              icon={<User size={16} />}
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-
-            <Input
-              label="Email Address"
-              icon={<Mail size={16} />}
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-
-            <Input
-              label="Phone Number"
-              icon={<Phone size={16} />}
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-            />
+            <Input label="Full Name" icon={<User size={16} />} name="name" value={formData.name} onChange={handleChange} />
+            <Input label="Email Address" icon={<Mail size={16} />} name="email" type="email" value={formData.email} onChange={handleChange} />
+            <Input label="Phone Number" icon={<Phone size={16} />} name="phone" value={formData.phone} onChange={handleChange} />
 
             <div>
-              <label className="text-sm font-medium mb-2 block">
-                Select Service
-              </label>
+              <label className="text-sm font-medium mb-2 block">Select Service</label>
               <select
                 name="service"
                 value={formData.service}
@@ -222,30 +198,13 @@ const Booking = () => {
               >
                 <option value="">Choose a service</option>
                 {services.map((service) => (
-                  <option key={service} value={service}>
-                    {service}
-                  </option>
+                  <option key={service} value={service}>{service}</option>
                 ))}
               </select>
             </div>
 
-            <Input
-              label="Preferred Date"
-              icon={<Calendar size={16} />}
-              name="date"
-              type="date"
-              value={formData.date}
-              onChange={handleChange}
-            />
-
-            <Input
-              label="Preferred Time"
-              icon={<Clock size={16} />}
-              name="time"
-              type="time"
-              value={formData.time}
-              onChange={handleChange}
-            />
+            <Input label="Preferred Date" icon={<Calendar size={16} />} name="date" type="date" value={formData.date} onChange={handleChange} />
+            <Input label="Preferred Time" icon={<Clock size={16} />} name="time" type="time" value={formData.time} onChange={handleChange} />
           </div>
 
           <textarea
@@ -260,7 +219,7 @@ const Booking = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-rose-500 to-pink-600 text-white py-4 rounded-full font-semibold text-lg hover:scale-105 transition"
+            className="w-full bg-gradient-to-r from-rose-500 to-pink-600 text-white py-4 rounded-full font-semibold text-lg"
           >
             {loading ? "Booking..." : "Confirm Booking"}
           </button>
@@ -287,4 +246,5 @@ const Input = ({ label, icon, name, value, onChange, type = "text" }) => (
 );
 
 export default Booking;
+
 
