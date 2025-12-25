@@ -54,7 +54,7 @@ const Hero = () => {
               Explore Services
             </button>
             </a>
-            <a href="/contact#contact">
+            <a href="/contact">
             <button className="magnetic-btn bg-rose-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-white">
               Book Now
             </button>
