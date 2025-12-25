@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import CustomCursor from "./components/CustomCursor";
 import Navbar from "./components/Navbar";
@@ -8,12 +9,25 @@ import Home from "./pages/Home";
 import BeforeAfter from "./pages/BeforeAfter";
 import Contact from "./pages/Contact";
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   return (
     <>
+      <ScrollToTop />
+
       <CustomCursor />
       <Navbar />
 
+      {/* Main Content */}
       <main className="overflow-x-hidden">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -28,6 +42,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

@@ -9,10 +9,9 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  /* Scroll background effect */
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -27,18 +26,28 @@ const Navbar = () => {
     { name: "Contact", href: "/contact", type: "route" },
   ];
 
+  /* Anchor navigation handler */
   const handleAnchorClick = (href) => {
     setMobileMenuOpen(false);
 
     if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => {
-        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-      }, 300);
+      navigate("/", { replace: false });
+
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          document.querySelector(href)?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 100);
+      });
       return;
     }
 
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    document.querySelector(href)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   return (
@@ -54,8 +63,16 @@ const Navbar = () => {
 
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Sparkles className={`w-8 h-8 ${scrolled ? "text-rose-500" : "text-white"}`} />
-            <span className={`text-2xl font-bold ${scrolled ? "text-gray-900" : "text-white"}`}>
+            <Sparkles
+              className={`w-8 h-8 ${
+                scrolled ? "text-rose-500" : "text-white"
+              }`}
+            />
+            <span
+              className={`text-2xl font-bold ${
+                scrolled ? "text-gray-900" : "text-white"
+              }`}
+            >
               LuxeGlow
             </span>
           </Link>
@@ -67,7 +84,7 @@ const Navbar = () => {
                 <button
                   key={item.name}
                   onClick={() => handleAnchorClick(item.href)}
-                  className={`text-sm font-medium ${
+                  className={`text-sm font-medium transition-colors ${
                     scrolled ? "text-gray-700" : "text-white"
                   } hover:text-rose-500`}
                 >
@@ -77,7 +94,7 @@ const Navbar = () => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`text-sm font-medium ${
+                  className={`text-sm font-medium transition-colors ${
                     scrolled ? "text-gray-700" : "text-white"
                   } hover:text-rose-500`}
                 >
@@ -96,7 +113,7 @@ const Navbar = () => {
           {/* Mobile Toggle */}
           <button
             className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
           >
             {mobileMenuOpen ? (
               <X className={scrolled ? "text-gray-900" : "text-white"} />
