@@ -108,7 +108,6 @@
 import { useState } from "react";
 import { Calendar, Clock, User, Mail, Phone } from "lucide-react";
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 const Booking = () => {
   const [formData, setFormData] = useState({
@@ -128,43 +127,6 @@ const Booking = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const response = await fetch(`${API_URL}/api/book`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Booking failed");
-      }
-
-      alert("✅ Booking confirmed!");
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        service: "",
-        date: "",
-        time: "",
-        message: "",
-      });
-    } catch (error) {
-      console.error("Booking Error:", error);
-      alert("❌ Booking failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const services = [
     "Hair Styling",
     "Facial Treatment",
@@ -181,7 +143,7 @@ const Booking = () => {
           Book Your Appointment
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
             <Input label="Full Name" icon={<User size={16} />} name="name" value={formData.name} onChange={handleChange} />
             <Input label="Email Address" icon={<Mail size={16} />} name="email" type="email" value={formData.email} onChange={handleChange} />
