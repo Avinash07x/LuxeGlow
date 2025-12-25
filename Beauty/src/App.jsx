@@ -14,7 +14,7 @@ function App() {
       <CustomCursor />
       <Navbar />
 
-      <main className="overflow-x-hidden pt-24">
+      <main className="overflow-x-hidden">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/transformations" element={<BeforeAfter />} />
