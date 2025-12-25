@@ -49,12 +49,16 @@ const Hero = () => {
             Experience luxury beauty treatments in a serene, elegant environment
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animation-delay-400">
+            <a href="#services">
             <button className="magnetic-btn bg-white text-rose-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
               Explore Services
             </button>
+            </a>
+            <a href="/contact#contact">
             <button className="magnetic-btn bg-rose-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-white">
-              Book Appointment
+              Book Now
             </button>
+            </a>
           </div>
         </div>
       </div>

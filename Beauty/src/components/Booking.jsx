@@ -246,5 +246,3 @@ const Input = ({ label, icon, name, value, onChange, type = "text" }) => (
 );
 
 export default Booking;
-
-
