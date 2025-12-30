@@ -1,27 +1,25 @@
-import { useEffect, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { useEffect, useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   const [scrollY, setScrollY] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <section id="home" className="relative h-screen overflow-hidden">
+      {/* Background Gradient */}
       <div
         className="absolute inset-0 bg-gradient-to-br from-rose-300 via-pink-200 to-amber-100"
-        style={{
-          transform: `translateY(${scrollY * 0.5}px)`,
-        }}
+        style={{ transform: `translateY(${scrollY * 0.5}px)` }}
       />
 
+      {/* Floating Orbs */}
       <div
         className="absolute inset-0"
         style={{
@@ -34,6 +32,7 @@ const Hero = () => {
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-amber-300/30 rounded-full blur-3xl animate-pulse" />
       </div>
 
+      {/* Content */}
       <div className="relative h-full flex items-center justify-center text-center px-4">
         <div
           className="max-w-4xl"
@@ -45,32 +44,37 @@ const Hero = () => {
           <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 animate-fade-in-up">
             Beauty <span className="text-rose-600">Redefined</span>
           </h1>
+
           <p className="text-xl md:text-2xl text-white/90 mb-8 animate-fade-in-up animation-delay-200">
             Experience luxury beauty treatments in a serene, elegant environment
           </p>
+
+          {/* Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animation-delay-400">
+            {/* Hash navigation is OK */}
             <a href="#services">
-            <button className="magnetic-btn bg-white text-rose-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105">
-              Explore Services
-            </button>
+              <button className="magnetic-btn bg-white text-rose-600 px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                Explore Services
+              </button>
             </a>
-            <a href="/contact">
-            <button className="magnetic-btn bg-rose-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-white">
-              Book Now
-            </button>
-            </a>
+
+            {/* ✅ React Router navigation */}
+            <Link to="/contact">
+              <button className="magnetic-btn bg-rose-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 border-2 border-white">
+                Book Now
+              </button>
+            </Link>
           </div>
         </div>
       </div>
 
+      {/* Scroll Down Indicator */}
       <div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce"
-        style={{
-          opacity: 1 - scrollY / 200,
-        }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce"
+        style={{ opacity: 1 - scrollY / 200 }}
       >
-        <a href="#services" className="cursor-pointer">
-        <ChevronDown className="w-8 h-8 text-white" />
+        <a href="#services">
+          <ChevronDown className="w-8 h-8 text-white" />
         </a>
       </div>
     </section>

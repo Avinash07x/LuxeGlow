@@ -105,11 +105,13 @@
 // export default Booking;
 
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Calendar, Clock, User, Mail, Phone } from "lucide-react";
 
-
 const Booking = () => {
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -122,19 +124,31 @@ const Booking = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const services = [
+    "Basic Glow",
+    "Luxury Spa",
+    "Bridal Package",
+    "Hair Styling",
+    "Facial Treatment",
+    "Spa & Massage",
+    "Eye & Brow",
+    "Skin Care",
+  ];
+
+  // ✅ AUTO-SELECT FROM PRICING
+  useEffect(() => {
+    if (location.state?.selectedService) {
+      setFormData((prev) => ({
+        ...prev,
+        service: location.state.selectedService,
+      }));
+    }
+  }, [location.state]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
-  const services = [
-    "Hair Styling",
-    "Facial Treatment",
-    "Spa & Massage",
-    "Bridal Makeup",
-    "Eye & Brow",
-    "Skin Care",
-  ];
 
   return (
     <section id="contact" className="py-24 bg-white">
@@ -150,7 +164,9 @@ const Booking = () => {
             <Input label="Phone Number" icon={<Phone size={16} />} name="phone" value={formData.phone} onChange={handleChange} />
 
             <div>
-              <label className="text-sm font-medium mb-2 block">Select Service</label>
+              <label className="text-sm font-medium mb-2 block">
+                Select Service
+              </label>
               <select
                 name="service"
                 value={formData.service}
@@ -160,7 +176,9 @@ const Booking = () => {
               >
                 <option value="">Choose a service</option>
                 {services.map((service) => (
-                  <option key={service} value={service}>{service}</option>
+                  <option key={service} value={service}>
+                    {service}
+                  </option>
                 ))}
               </select>
             </div>
