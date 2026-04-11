@@ -7,7 +7,7 @@ const Pricing = () => {
       title: "Basic Glow",
       price: "₹1,999",
       duration: "60 mins",
-      description: "Perfect for a quick refresh & natural glow, radiant finish.",
+      description: "Perfect for a quick refresh & natural glow , radiant finish.",
       popular: false,
       features: [
         "Clean-up Facial",

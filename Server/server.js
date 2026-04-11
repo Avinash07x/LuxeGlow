@@ -7,46 +7,44 @@ const connectDB = require("./lib/db");
 
 const app = express();
 
+/* ✅ Connect DB */
+connectDB().catch((err) => {
+  console.error("❌ DB Error:", err.message);
+  process.exit(1);
+});
+
 /* ✅ CORS */
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://luxe-glow-five.vercel.app",
-    ],
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
+    origin: "http://localhost:5173",
+    credentials: true,
   })
 );
 
+/* ✅ Middleware */
 app.use(express.json());
-
-/* ✅ Health check */
-app.get("/", (req, res) => {
-  res.json({ status: "API running" });
-});
-
-/* ✅ Ensure DB is connected */
-app.use(async (req, res, next) => {
-  try {
-    await connectDB();
-    next();
-  } catch (err) {
-    console.error("❌ DB connection failed:", err.message);
-    res.status(500).json({ error: "Database connection failed" });
-  }
-});
 
 /* ✅ Routes */
 app.use("/api/book", bookingRoutes);
 
-/* 🔥 LOCAL ONLY: start server */
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on http://localhost:${PORT}`);
-  });
-}
+/* ✅ Health */
+app.get("/", (req, res) => {
+  res.json({ status: "API running 🚀" });
+});
 
-/* ✅ REQUIRED for Vercel */
-module.exports = app;
+/* ❌ 404 */
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
+/* ❌ Error */
+app.use((err, req, res, next) => {
+  console.error("🔥 Error:", err);
+  res.status(500).json({ error: "Internal Server Error" });
+});
+
+/* ✅ Start server */
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
